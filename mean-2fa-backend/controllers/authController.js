@@ -112,31 +112,32 @@ exports.setup2FA = asyncHandler(async (req, res) => {
             {
                 service: 'gmail'
                 , auth: {
-                    user: process.env.EMAIL_USER  
-                    , pass: process.env.EMAIL_PASS   
-                }
-                , tls: {
-                    rejectUnauthorized: false  
+                    user: process.env.EMAIL_USER
+                    , pass: process.env.EMAIL_PASS
                 }
             }
         );
         
-        await transporter.sendMail(
+        let info = await transporter.sendMail(
             {
-                from: "davaa7929@gmai.com"
+                from: process.env.EMAIL_USER
                 , to: user.email
                 , subject: 'Your 2FA QR Code'
                 , html: `<img src="${qrCode}" />`
             }
         );
 
+        console.log( info.messageId );
+
         res.status(200).json(
             {
                 success: true
-                , message: "Sent email"
+                , message: "Email sent"
             }
         );
     } catch (error) {
+
+        console.log( error );
 
         res.status(500).json(
             {
