@@ -13,7 +13,7 @@ const router = express.Router();
 router.route("/register").post(register);
 router.route("/login").post(login);
 
-router.route("/setup_2fa").get(isAuth, setup2FA);
-router.route("/verify_opt").post(isAuth, verifyOTP);
+router.route("/enable-2fa").get(isAuth, setup2FA);
+router.route("/verify-opt").post(isAuth, verifyOTP);
 
 module.exports = router;

@@ -92,10 +92,10 @@ exports.login = asyncHandler(async (req, res) => {
 
 exports.setup2FA = asyncHandler(async (req, res) => {
     try {
-        console.log('====================================');
-        console.log( "setup2FA" );
-        console.log( req.user );
-        console.log('====================================');
+        // console.log('====================================');
+        // console.log( "setup2FA" );
+        // console.log( req.user );
+        // console.log('====================================');
 
         const user = await User.findById( req.user.id );
         const secret = speakeasy.generateSecret();
@@ -104,9 +104,10 @@ exports.setup2FA = asyncHandler(async (req, res) => {
         user.twoFactorEnabled = true;
 
         await user.save();
+        console.log( secret.otpauth_url );
         const otpauthUrl = secret.otpauth_url;
 
-        const qrCode = QRCode.toDataURL(otpauthUrl);
+        const qrCode = await QRCode.toDataURL(otpauthUrl);
 
         const transporter = nodemailer.createTransport(
             {
@@ -117,13 +118,26 @@ exports.setup2FA = asyncHandler(async (req, res) => {
                 }
             }
         );
-        
+
+        const qrCodeBuffer = Buffer.from(qrCode.split(",")[1], "base64");
+
         let info = await transporter.sendMail(
             {
                 from: process.env.EMAIL_USER
                 , to: user.email
                 , subject: 'Your 2FA QR Code'
-                , html: `<img src="${qrCode}" />`
+                , html: `
+                    <div>
+                        <img src="cid:qr_otp" />
+                    </div>
+                `,
+                attachments: [
+                    {
+                        filename: "qrcode.png" 
+                        , content: qrCodeBuffer
+                        , cid: "qr_otp" 
+                    }
+                ]
             }
         );
 
@@ -152,14 +166,18 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
     const { otp } = req.body;
     const user = await User.findById(req.user.id);
 
-    const verified = speakeasy.totp.verify({
-        secret: user.twoFactorSecret,
-        encoding: 'base32',
-        token: otp
-    });
+    const verified = speakeasy.totp.verify(
+        {
+            secret: user.twoFactorSecret
+            , encoding: 'base32'
+            , token: otp
+        }
+    );
+
+    console.log( verified );
     if (verified) {
         res.status(200).json({ message: '2FA verified successfully.' });
     } else {
-        res.status(400).json({ error: 'Invalid OTP.' });
+        res.status(400).json({ error: 'Invalid OTP davaa.' });
     }
 });
