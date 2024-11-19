@@ -1,0 +1,6 @@
+:host {
+    display: flex;            /* Enable Flexbox */
+    height: 100vh;            /* Full viewport height */
+    width: 100%;            
+}
+  

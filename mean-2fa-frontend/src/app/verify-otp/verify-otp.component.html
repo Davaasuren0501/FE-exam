@@ -1,0 +1,33 @@
+<div class="bg-gray-50 w-full">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div class="w-full bg-white rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                    Verify OTP
+                </h1>
+                <form class="space-y-4 md:space-y-6" (ngSubmit)="verify()">
+                    <div>
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                        <input 
+                            type="tel" 
+                            name="otp" 
+                            id="otp" 
+                            [(ngModel)]="otp" 
+                            placeholder="000 000" 
+                            class="bg-gray-50 border text-2xl border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" 
+                            required />
+                    </div>
+                    <button 
+                        class="w-full rounded-lg text-sm px-5 py-2.5 text-center text-white"
+                        [ngClass]="{'bg-cyan-600': otp.length === 6, 'bg-gray-500': otp.length !== 6}"
+                        [disabled]="otp.length !== 6">
+                        Verify
+                    </button>
+                    <p class="text-sm font-light text-gray-500">
+                        Have you not received your otp yet? <a href="#" class="font-medium text-primary-600 hover:underline">Send again</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -164,6 +164,7 @@ exports.setup2FA = asyncHandler(async (req, res) => {
 
 exports.verifyOTP = asyncHandler(async (req, res) => {
     const { otp } = req.body;
+    
     const user = await User.findById(req.user.id);
 
     const verified = speakeasy.totp.verify(
@@ -174,10 +175,22 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
         }
     );
 
+    console.log( "verified in verifyOTP" );
     console.log( verified );
-    if (verified) {
-        res.status(200).json({ message: '2FA verified successfully.' });
+    
+    if( verified ) {
+        res.status(200).json(
+            { 
+                success: true
+                , message: '2FA verified successfully.' 
+            }
+        );
     } else {
-        res.status(400).json({ error: 'Invalid OTP davaa.' });
+        res.status(400).json(
+            { 
+                success: false
+                , error: 'Invalid OTP davaa.' 
+            }
+        );
     }
 });

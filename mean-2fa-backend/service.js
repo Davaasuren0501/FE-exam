@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require('cors');
 
 const connectDB = require("./config/db");
 const routesUsers = require("./routes/users");
@@ -12,6 +13,11 @@ const app = express();
 connectDB();
 
 app.use(express.json());
+
+app.use(cors({
+  origin: 'http://localhost:4200'
+}));
+
 
 app.use("/api/v1/users", routesUsers);
 

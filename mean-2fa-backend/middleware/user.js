@@ -3,16 +3,16 @@ const User = require("../models/User");
 
 const isAuth = async (req, res, next) => {
     
-    // console.log('====================================');
-    // console.log( req.headers);
-    // console.log('====================================');
+    console.log('====================================');
+    console.log( req.headers);
+    console.log('====================================');
 
     const tokenUser = req.headers.token; 
     if( !tokenUser ) {
         return res.status(401).json(
             {
                 success: false
-                , message: "You shoud login" 
+                , message: "User access token undefined" 
             }
         );
     }
@@ -25,7 +25,7 @@ const isAuth = async (req, res, next) => {
         res.status(401).json(
             {
                 success: false
-                , message: "Invalid Token" 
+                , message: "Invalid User Access Token" 
             }
         );
     }
