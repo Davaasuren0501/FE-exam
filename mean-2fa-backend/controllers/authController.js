@@ -76,7 +76,7 @@ exports.login = asyncHandler(async (req, res) => {
         return res.status(401).json(
             {
                 success: false
-                , message: "Please enter your assword correctly"
+                , message: "Please enter your password correctly"
             }
         );
     }
