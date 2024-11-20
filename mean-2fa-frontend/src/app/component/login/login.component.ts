@@ -40,22 +40,34 @@ export class LoginComponent {
             (responseData) => {
                 console.log('ResponseData:', responseData);
                 if (responseData.success ) {
-                    // console.log('Token:', responseData.token);
+
                     if( responseData.token ) {
                         localStorage.setItem('token', responseData.token);
                     } else {
                         console.error('Token is undefined');
                     }
-    
-                    this.router.navigate(['/login/verify-otp']);
+                    
+                    this.authService.enable2fa( ).subscribe(
+                        (responseDataEnable2fa) => {
+                            console.log('responseDataEnable2fa:', responseDataEnable2fa);
+                            this.router.navigate(['/auth/verify-otp']);
+                        },
+                        (errorDataEnable2fa) => {
+                            console.log( 'Enable2fa:' );
+                            console.log( errorDataEnable2fa );
+                            console.log( errorDataEnable2fa.error?.message );
+                            this.errorMessage = errorDataEnable2fa?.error?.message;
+                        }
+                    )
                 } else {
                     this.errorMessage = 'Login failed. Please try again.';
                 }
             },
             (errorData) => {
                 console.log( 'ErrorData:' );
-                console.log( errorData.error.message );
-                this.errorMessage = errorData.error.message;
+                console.log( errorData );
+                console.log( errorData.error?.message );
+                this.errorMessage = errorData?.error?.message;
             }
         )
         

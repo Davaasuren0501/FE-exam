@@ -44,11 +44,27 @@ export class AuthService {
         });
 
         return this.http.post<LoginResponse>(
-            `${baseUrl}login` 
+            `${baseUrl}/login` 
             , { 
                 email
                 , password
             } 
+            , { 
+                headers
+            }
+        )
+    }
+    enable2fa() {
+        // console.log( "call enable2fa" );
+        
+        const token = this.getToken();
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+            , 'token': token !== null ? token : ""
+        });
+
+        return this.http.get(
+            `${baseUrl}/enable-2fa`  
             , { 
                 headers
             }

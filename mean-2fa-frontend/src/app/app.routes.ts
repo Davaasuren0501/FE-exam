@@ -4,7 +4,7 @@ import { LoginComponent } from './component/login/login.component';
 import { VerifyOtpComponent } from './component/verify-otp/verify-otp.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' }
-    , { path: 'login', component: LoginComponent }
-    , { path: 'login/verify-otp', component: VerifyOtpComponent }
+    { path: '', redirectTo: 'auth/login', pathMatch: 'full' }
+    , { path: 'auth/login', component: LoginComponent }
+    , { path: 'auth/verify-otp', component: VerifyOtpComponent }
 ];
