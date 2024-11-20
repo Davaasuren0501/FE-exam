@@ -19,9 +19,13 @@ export class LoginComponent {
     email: string = '';
     password: string = ''; 
     errorMessage: string = ''; 
+    loading: boolean = false;
     constructor( private authService: AuthService, private router: Router ) {}
 
     login() {
+        if( this.loading ) {
+            return;
+        }
         if( !this.email || !this.password) {
             this.errorMessage = 'Please fill out all fields!';
             return;
@@ -35,7 +39,7 @@ export class LoginComponent {
         this.errorMessage = ""
         console.log( { email: this.email, password: this.password } );
         
-
+        this.loading = true
         this.authService.login( this.email, this.password ).subscribe(
             (responseData) => {
                 console.log('ResponseData:', responseData);
@@ -49,6 +53,7 @@ export class LoginComponent {
                     
                     this.authService.enable2fa( ).subscribe(
                         (responseDataEnable2fa) => {
+                            this.loading = false
                             console.log('responseDataEnable2fa:', responseDataEnable2fa);
                             this.router.navigate(['/auth/verify-otp']);
                         },
@@ -56,14 +61,17 @@ export class LoginComponent {
                             console.log( 'Enable2fa:' );
                             console.log( errorDataEnable2fa );
                             console.log( errorDataEnable2fa.error?.message );
+                            this.loading = false
                             this.errorMessage = errorDataEnable2fa?.error?.message;
                         }
                     )
                 } else {
+                    this.loading = false
                     this.errorMessage = 'Login failed. Please try again.';
                 }
             },
             (errorData) => {
+                this.loading = false
                 console.log( 'ErrorData:' );
                 console.log( errorData );
                 console.log( errorData.error?.message );

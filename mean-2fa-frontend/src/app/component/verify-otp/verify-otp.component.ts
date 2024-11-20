@@ -20,20 +20,27 @@ export class VerifyOtpComponent {
     otp: string = ''; 
     errorMessage: string = '';
     responseStatus: boolean = false;
+    loading: boolean = false;
     constructor(private authService: AuthService) {}
 
     verify() {
+        if( this.loading ) {
+            return;
+        }
         console.log('OTP Submitted:', this.otp);
         this.errorMessage = "";
         this.responseStatus = false;
+        this.loading = true
         this.authService.verifyOTP(this.otp).subscribe(
             (responseData) => {
                 console.log('ResponseData:', responseData);
+                this.loading = false
                 this.responseStatus = true
             },
             (errorData) => {
                 console.log( 'ErrorData:' );
                 console.log( errorData.error.message );
+                this.loading =false
                 this.errorMessage = errorData.error.message || 'Sorry. Please try again.';
             }
         )
