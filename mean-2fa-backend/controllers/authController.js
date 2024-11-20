@@ -65,7 +65,7 @@ exports.login = asyncHandler(async (req, res) => {
         return res.status(401).json(
             {
                 success: false
-                , message: "User undefined. Check email and try again"
+                , message: "User undefined. Please check email and try again"
             }
         );
     }
@@ -76,7 +76,7 @@ exports.login = asyncHandler(async (req, res) => {
         return res.status(401).json(
             {
                 success: false
-                , message: "Please enter your email and password correctly"
+                , message: "Please enter your assword correctly"
             }
         );
     }
@@ -189,7 +189,7 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
         res.status(400).json(
             { 
                 success: false
-                , error: 'Invalid OTP davaa.' 
+                , message: 'Invalid OTP' 
             }
         );
     }
